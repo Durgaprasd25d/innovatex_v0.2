@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Send, Loader2, CheckCircle, XCircle } from "lucide-react"
+import { Send, Loader2, CheckCircle, XCircle, Upload, Trash2, PlusCircle } from "lucide-react"
 
 interface TeamMember {
   name: string
@@ -18,6 +18,8 @@ const RegistrationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
+  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null)
+  const [previewURL, setPreviewURL] = useState<string | null>(null)
 
   const tracks = [
     { id: "blockchain", name: "Blockchain & Web3" },
@@ -25,82 +27,102 @@ const RegistrationForm = () => {
     { id: "innovation", name: "Open Innovation" },
   ]
 
+  /** Add a new team member */
   const handleAddMember = () => {
-    if (teamMembers.length < 8) {
+    if (teamMembers.length < 5) {
       setTeamMembers([...teamMembers, { name: "", email: "", role: "" }])
     }
   }
 
+  /** Remove a team member */
   const handleRemoveMember = (index: number) => {
     if (teamMembers.length > 1) {
-      const newMembers = teamMembers.filter((_, i) => i !== index)
-      setTeamMembers(newMembers)
+      setTeamMembers(teamMembers.filter((_, i) => i !== index))
     }
   }
 
+  /** Update team member fields */
   const handleMemberChange = (index: number, field: keyof TeamMember, value: string) => {
-    const newMembers = teamMembers.map((member, i) => {
-      if (i === index) {
-        return { ...member, [field]: value }
-      }
-      return member
-    })
-    setTeamMembers(newMembers)
+    const updatedMembers = teamMembers.map((member, i) => (i === index ? { ...member, [field]: value } : member))
+    setTeamMembers(updatedMembers)
   }
 
+  /** Handle payment screenshot selection */
+  const handlePaymentScreenshotChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file && file.type.startsWith("image/")) {
+      setPaymentScreenshot(file)
+      setPreviewURL(URL.createObjectURL(file))
+    } else {
+      alert("Please upload a valid image file (JPG, PNG, etc.)")
+    }
+  }
+
+  /** Handle form submission */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus("idle")
     setErrorMessage("")
 
-    // Create form data object
+    if (!teamName || !selectedTrack || !paymentScreenshot) {
+      setErrorMessage("Please fill all required fields.")
+      setSubmitStatus("error")
+      setIsSubmitting(false)
+      return
+    }
+
     const formData = new FormData()
     formData.append("teamName", teamName)
-    formData.append("selectedTrack", selectedTrack)
-    formData.append("teamMembers", JSON.stringify(teamMembers))
+    formData.append("track", selectedTrack)
+    formData.append("members", JSON.stringify(teamMembers.filter((m) => m.name && m.email && m.role)))
+    formData.append("paymentScreenshot", paymentScreenshot)
 
     try {
-      // Use a CORS proxy to make the request
-      // Option 1: Using a public CORS proxy (not recommended for production)
-      const targetUrl = "https://script.google.com/macros/s/AKfycbzbet6oP1ZALlNynrKG5djsDWIKUvbZHGqFS2Xxx2JPY8TYcwZ7JLkeJuKoLGfBVuvBUg/exec"
-
-      const response = await fetch(targetUrl, {
+      const response = await fetch("https://gietx.onrender.com/api/team/register", {
         method: "POST",
         body: formData,
       })
-      
 
-      // Since we're using a CORS proxy, we should be able to read the response
-      if (!response.ok) {
-        throw new Error("Failed to submit registration")
+      const result = await response.json()
+      if (response.ok) {
+        setSubmitStatus("success")
+        setTeamName("")
+        setSelectedTrack("")
+        setTeamMembers([{ name: "", email: "", role: "" }])
+        setPaymentScreenshot(null)
+        setPreviewURL(null)
+      } else {
+        throw new Error(result.message || "Failed to submit registration")
       }
-
-      setSubmitStatus("success")
-      setTeamName("")
-      setSelectedTrack("")
-      setTeamMembers([{ name: "", email: "", role: "" }]) // Reset form
     } catch (error: any) {
-      console.error("Form submission error:", error)
       setSubmitStatus("error")
-      setErrorMessage(error.message || "Submission failed. Please try again later.")
+      setErrorMessage(error.message || "Submission failed. Try again.")
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <section id="register" className="py-16 bg-[#0a0a0a]">
-      <div className="max-w-4xl mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg blur-xl" />
-          <div className="relative bg-glass rounded-lg p-8 neon-border">
-            <h2 className="text-3xl font-bold text-center mb-8 text-gradient">Team Registration</h2>
+    <section className="py-8 md:py-16 bg-[#0a0a0a] text-white min-h-screen flex items-center">
+      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <div className="bg-gray-900 p-4 sm:p-6 md:p-8 rounded-lg shadow-lg border border-gray-700">
+            <h2 className="text-3xl font-bold text-center mb-8">Team Registration</h2>
+
+            {submitStatus === "success" && (
+              <div className="flex flex-col items-center justify-center text-green-400 p-4 bg-green-900/20 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <CheckCircle className="w-6 h-6 mr-2" /> Registration Successful!
+                </div>
+                <p className="text-center">Stay tuned, you will get back from the coordinator.</p>
+              </div>
+            )}
+            {submitStatus === "error" && (
+              <div className="flex items-center justify-center text-red-400">
+                <XCircle className="w-6 h-6 mr-2" /> {errorMessage}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Team Name */}
@@ -111,7 +133,7 @@ const RegistrationForm = () => {
                   value={teamName}
                   onChange={(e) => setTeamName(e.target.value)}
                   required
-                  className="w-full px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                  className="w-full px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
                   placeholder="Enter your team name"
                 />
               </div>
@@ -123,7 +145,7 @@ const RegistrationForm = () => {
                   value={selectedTrack}
                   onChange={(e) => setSelectedTrack(e.target.value)}
                   required
-                  className="w-full px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                  className="w-full px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
                 >
                   <option value="">Select a track</option>
                   {tracks.map((track) => (
@@ -135,105 +157,116 @@ const RegistrationForm = () => {
               </div>
 
               {/* Team Members */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <label className="text-blue-400">Team Members (Optional)</label>
-                  <button
-                    type="button"
-                    onClick={handleAddMember}
-                    disabled={teamMembers.length >= 8}
-                    className="px-4 py-2 text-sm rounded-lg bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Add Member ({teamMembers.length}/8)
-                  </button>
-                </div>
-
+              <div>
+                <label className="block text-blue-400 mb-2">Team Members (Max 5)</label>
                 {teamMembers.map((member, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="p-4 bg-gray-800/30 rounded-lg space-y-3"
-                  >
-                    <div className="flex justify-between items-center">
-                      <h4 className="text-white">Member {index + 1}</h4>
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveMember(index)}
-                          className="text-red-400 hover:text-red-300"
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      <input
-                        type="text"
-                        value={member.name}
-                        onChange={(e) => handleMemberChange(index, "name", e.target.value)}
-                        placeholder="Name"
-                        className="px-3 py-2 bg-gray-800/50 rounded-lg border border-gray-700 text-white focus:outline-none focus:border-blue-500"
-                      />
-                      <input
-                        type="email"
-                        value={member.email}
-                        onChange={(e) => handleMemberChange(index, "email", e.target.value)}
-                        placeholder="Email"
-                        className="px-3 py-2 bg-gray-800/50 rounded-lg border border-gray-700 text-white focus:outline-none focus:border-blue-500"
-                      />
+                  <div key={index} className="flex flex-col md:flex-row gap-3 mb-4">
+                    <input
+                      type="text"
+                      value={member.name}
+                      onChange={(e) => handleMemberChange(index, "name", e.target.value)}
+                      placeholder="Name"
+                      required
+                      className="w-full md:w-1/3 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                    />
+                    <input
+                      type="email"
+                      value={member.email}
+                      onChange={(e) => handleMemberChange(index, "email", e.target.value)}
+                      placeholder="Email"
+                      required
+                      className="w-full md:w-1/3 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                    />
+                    <div className="flex items-center gap-3">
                       <input
                         type="text"
                         value={member.role}
                         onChange={(e) => handleMemberChange(index, "role", e.target.value)}
-                        placeholder="Role (e.g., Developer, Designer)"
-                        className="px-3 py-2 bg-gray-800/50 rounded-lg border border-gray-700 text-white focus:outline-none focus:border-blue-500"
+                        placeholder="Role"
+                        required
+                        className="w-full md:w-auto flex-1 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
                       />
+                      {teamMembers.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveMember(index)}
+                          className="text-red-500 p-2 hover:bg-gray-800 rounded-full transition-colors"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      )}
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
+                {teamMembers.length < 5 && (
+                  <button
+                    type="button"
+                    onClick={handleAddMember}
+                    className="text-green-400 flex items-center space-x-2"
+                  >
+                    <PlusCircle /> <span>Add Member</span>
+                  </button>
+                )}
               </div>
 
-              {/* Submit Button */}
-              <div className="flex justify-center">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-8 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-                >
-                  {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                  <span>Submit Registration</span>
-                </button>
+              {/* Payment Screenshot Upload */}
+              <div>
+                <label className="block text-blue-400 mb-2">Upload Payment Screenshot</label>
+                <div className="border-2 border-dashed border-gray-700 rounded-lg p-4 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePaymentScreenshotChange}
+                    className="hidden"
+                    id="payment-screenshot"
+                  />
+                  {!previewURL ? (
+                    <label
+                      htmlFor="payment-screenshot"
+                      className="flex flex-col items-center justify-center cursor-pointer py-4"
+                    >
+                      <Upload className="w-8 h-8 mb-2 text-blue-400" />
+                      <span className="text-sm text-gray-400">Click to upload payment screenshot</span>
+                    </label>
+                  ) : (
+                    <div className="relative">
+                      <img
+                        src={previewURL || "/placeholder.svg"}
+                        alt="Payment Screenshot"
+                        className="mt-3 rounded-lg max-w-full max-h-64 mx-auto"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPaymentScreenshot(null)
+                          setPreviewURL(null)
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Status Messages */}
-              {submitStatus === "success" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-green-500/20 rounded-lg"
-                >
-                  <div className="flex items-center justify-center text-green-400 space-x-2 mb-2">
-                    <CheckCircle className="w-5 h-5" />
-                    <span className="font-semibold">Registration submitted successfully!</span>
-                  </div>
-                  <p className="text-center text-green-300 text-sm">
-                    Thank you for registering! Please check your email for updates about your registration status.
-                  </p>
-                </motion.div>
-              )}
-              {submitStatus === "error" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-red-500/20 rounded-lg"
-                >
-                  <div className="flex items-center justify-center text-red-400 space-x-2">
-                    <XCircle className="w-5 h-5" />
-                    <span>{errorMessage}</span>
-                  </div>
-                </motion.div>
-              )}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full flex items-center justify-center gap-2 transition-colors"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    <span>Submit Registration</span>
+                  </>
+                )}
+              </button>
             </form>
           </div>
         </motion.div>
