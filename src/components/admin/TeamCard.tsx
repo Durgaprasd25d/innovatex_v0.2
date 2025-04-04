@@ -1,12 +1,15 @@
+"use client";
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Check,
   ChevronDown,
   ChevronUp,
   Trash,
   Square,
   CheckSquare,
+  Phone,
+  User,
 } from "lucide-react";
 
 const TeamCard = ({ team, onVerify, onDelete }) => {
@@ -96,27 +99,51 @@ const TeamCard = ({ team, onVerify, onDelete }) => {
                 {team.members.map((member, index) => (
                   <motion.div
                     key={index}
-                    className="flex items-center space-x-4 p-2 bg-gray-800 rounded-md shadow-md"
+                    className="flex flex-col p-2 bg-gray-800 rounded-md shadow-md"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                   >
-                    <div className="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center text-white">
-                      {member.name.charAt(0)}
+                    <div className="flex items-center space-x-4">
+                      <div className="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center text-white">
+                        {member.name.charAt(0)}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-white font-medium">{member.name}</p>
+                        <p className="text-xs text-gray-400">{member.email}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-white font-medium">{member.name}</p>
-                      <p className="text-xs text-gray-400">{member.email}</p>
+
+                    <div className="flex items-center mt-2 text-xs text-gray-300 space-x-4">
+                      <div className="flex items-center">
+                        <Phone className="h-3 w-3 mr-1 text-purple-400" />
+                        <span>{member.contactNo}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <User className="h-3 w-3 mr-1 text-purple-400" />
+                        <span className="capitalize">{member.gender}</span>
+                      </div>
                     </div>
-                    <span className="ml-auto text-xs text-purple-400">
-                      {member.role}
-                    </span>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Show Confirmation Slip Button */}
+        {team.isVerified && team.confirmationSlip && (
+          <div className="flex justify-center mt-4">
+            <a
+              href={team.confirmationSlip}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-all duration-300"
+            >
+              View Confirmation Slip
+            </a>
+          </div>
+        )}
 
         {/* Delete Button */}
         <div className="flex justify-center mt-4">
@@ -134,7 +161,7 @@ const TeamCard = ({ team, onVerify, onDelete }) => {
       <AnimatePresence>
         {preview && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center"
+            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

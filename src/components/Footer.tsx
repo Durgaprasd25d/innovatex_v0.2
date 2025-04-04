@@ -31,15 +31,29 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center text-gray-400">
                 <Mail className="w-5 h-5 mr-2" />
-                <a href="mailto:contact@innovatex.com" className="hover:text-blue-500 transition-colors">
-                  contact@innovatex.com
+                <a href="mailto:shibammohanty8658@gmail.com" className="hover:text-blue-500 transition-colors">
+                  shibammohanty8658@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center text-gray-400">
+                <Mail className="w-5 h-5 mr-2" />
+                <a href="mailto:chiranjeebkumarsahoo1@gmail.com" className="hover:text-blue-500 transition-colors">
+                  chiranjeebkumarsahoo1@gmail.com
                 </a>
               </div>
               <div className="flex items-center text-gray-400">
                 <Phone className="w-5 h-5 mr-2" />
-                <a href="tel:+918895555987" className="hover:text-blue-500 transition-colors">
-                  +91 123456789
+                <a href="tel:+916371850005" className="hover:text-blue-500 transition-colors">
+                  +91 6371850005
                 </a>
+               
+              </div>
+              <div className="flex items-center text-gray-400">
+              <Phone className="w-5 h-5 mr-2" />
+                <a href="tel:+918458024651" className="hover:text-blue-500 transition-colors">
+                  +91 8458024651
+                </a>
+               
               </div>
             </div>
           </div>

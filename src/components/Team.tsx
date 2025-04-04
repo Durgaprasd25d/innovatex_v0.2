@@ -1,38 +1,44 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Phone } from 'lucide-react';
 
 const Team = () => {
   const team = [
     {
-      name: 'Alice Johnson',
-      role: 'Frontend Developer',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
-      social: {
-        twitter: '#',
-        linkedin: '#',
-        github: '#',
-      },
+      name: 'Shibam Mohanty',
+      role: 'Student Co-ordinator',
+      contact: '+91 8458024651',
+      image: './shibam.jpg',
     },
     {
-      name: 'Bob Smith',
-      role: 'UI/UX Designer',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
-      social: {
-        twitter: '#',
-        linkedin: '#',
-        github: '#',
-      },
+      name: 'Durgaprasad Dalai',
+      role: 'Student Co-ordinator',
+      contact: '+91 8895555987',
+      image: './durga.jpg',
     },
     {
-      name: 'Charlie Brown',
-      role: 'Backend Developer',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
-      social: {
-        twitter: '#',
-        linkedin: '#',
-        github: '#',
-      },
+      name: 'Jyotiranjan Dhal',
+      role: 'Student Co-ordinator',
+      contact: '+91 9827778066',
+      image: './jyotiranjan.jpg',
+    },
+    {
+      name: 'Chiranjeeb Kumar Sahoo',
+      role: 'Student Co-ordinator',
+      contact: '+91 6371850005',
+      image: './chiranjeeb.jpg',
+    },
+    {
+      name: 'Abhishek Emmanual Hansdak',
+      role: 'Student Co-ordinator',
+      contact: '+91 9798264985',
+      image: './abhishek.jpg',
+    },
+    {
+      name: 'Tanmya Kumar Puti',
+      role: 'Student Co-ordinator',
+      contact: '+91 6371560859',
+      image: './tanmya.jpg',
     },
   ];
 
@@ -42,7 +48,7 @@ const Team = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gradient">
           Meet Our Team
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {team.map((member, index) => (
             <motion.div
@@ -61,18 +67,11 @@ const Team = () => {
                   className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
                 />
                 <h3 className="text-xl font-semibold text-white mb-2">{member.name}</h3>
-                <p className="text-blue-400 mb-4">{member.role}</p>
+                <p className="text-blue-400 mb-2">{member.role}</p>
                 
-                <div className="flex justify-center space-x-4">
-                  <a href={member.social.twitter} className="text-gray-400 hover:text-blue-500 transition-colors">
-                    <Twitter className="w-5 h-5" />
-                  </a>
-                  <a href={member.social.linkedin} className="text-gray-400 hover:text-blue-500 transition-colors">
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                  <a href={member.social.github} className="text-gray-400 hover:text-blue-500 transition-colors">
-                    <Github className="w-5 h-5" />
-                  </a>
+                <div className="flex items-center justify-center space-x-2 text-gray-300 mt-2">
+                  <Phone className="w-5 h-5 text-blue-400" />
+                  <span>{member.contact}</span>
                 </div>
               </div>
             </motion.div>

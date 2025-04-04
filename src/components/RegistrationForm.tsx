@@ -1,125 +1,171 @@
-"use client"
-
-import type React from "react"
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Send, Loader2, CheckCircle, XCircle, Upload, Trash2, PlusCircle } from "lucide-react"
+import type React from "react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Send,
+  Loader2,
+  CheckCircle,
+  XCircle,
+  Upload,
+  Trash2,
+  PlusCircle,
+} from "lucide-react";
 
 interface TeamMember {
-  name: string
-  email: string
-  role: string
+  name: string;
+  email: string;
+  contactNo: string;
+  gender: string;
 }
 
 const RegistrationForm = () => {
-  const [teamName, setTeamName] = useState("")
-  const [selectedTrack, setSelectedTrack] = useState("")
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([{ name: "", email: "", role: "" }])
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
-  const [errorMessage, setErrorMessage] = useState("")
-  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null)
-  const [previewURL, setPreviewURL] = useState<string | null>(null)
+  const [teamName, setTeamName] = useState("");
+  const [selectedTrack, setSelectedTrack] = useState("");
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
+    { name: "", email: "", contactNo: "", gender: "" },
+  ]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
+  const [previewURL, setPreviewURL] = useState<string | null>(null);
 
   const tracks = [
     { id: "blockchain", name: "Blockchain & Web3" },
     { id: "ai", name: "AI & Machine Learning" },
     { id: "innovation", name: "Open Innovation" },
-  ]
+  ];
 
   /** Add a new team member */
   const handleAddMember = () => {
     if (teamMembers.length < 5) {
-      setTeamMembers([...teamMembers, { name: "", email: "", role: "" }])
+      setTeamMembers([
+        ...teamMembers,
+        { name: "", email: "", contactNo: "", gender: "" },
+      ]);
     }
-  }
+  };
 
   /** Remove a team member */
   const handleRemoveMember = (index: number) => {
     if (teamMembers.length > 1) {
-      setTeamMembers(teamMembers.filter((_, i) => i !== index))
+      setTeamMembers(teamMembers.filter((_, i) => i !== index));
     }
-  }
+  };
 
   /** Update team member fields */
-  const handleMemberChange = (index: number, field: keyof TeamMember, value: string) => {
-    const updatedMembers = teamMembers.map((member, i) => (i === index ? { ...member, [field]: value } : member))
-    setTeamMembers(updatedMembers)
-  }
+  const handleMemberChange = (
+    index: number,
+    field: keyof TeamMember,
+    value: string
+  ) => {
+    const updatedMembers = teamMembers.map((member, i) =>
+      i === index ? { ...member, [field]: value } : member
+    );
+    setTeamMembers(updatedMembers);
+  };
 
   /** Handle payment screenshot selection */
-  const handlePaymentScreenshotChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handlePaymentScreenshotChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
-      setPaymentScreenshot(file)
-      setPreviewURL(URL.createObjectURL(file))
+      setPaymentScreenshot(file);
+      setPreviewURL(URL.createObjectURL(file));
     } else {
-      alert("Please upload a valid image file (JPG, PNG, etc.)")
+      alert("Please upload a valid image file (JPG, PNG, etc.)");
     }
-  }
+  };
 
   /** Handle form submission */
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus("idle")
-    setErrorMessage("")
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setErrorMessage("");
 
     if (!teamName || !selectedTrack || !paymentScreenshot) {
-      setErrorMessage("Please fill all required fields.")
-      setSubmitStatus("error")
-      setIsSubmitting(false)
-      return
+      setErrorMessage("Please fill all required fields.");
+      setSubmitStatus("error");
+      setIsSubmitting(false);
+      return;
     }
 
-    const formData = new FormData()
-    formData.append("teamName", teamName)
-    formData.append("track", selectedTrack)
-    formData.append("members", JSON.stringify(teamMembers.filter((m) => m.name && m.email && m.role)))
-    formData.append("paymentScreenshot", paymentScreenshot)
+    // Validate that all team members have required fields
+    const isAllMembersValid = teamMembers.every(
+      (member) =>
+        member.name && member.email && member.contactNo && member.gender
+    );
+
+    if (!isAllMembersValid) {
+      setErrorMessage("Please fill all required fields for each team member.");
+      setSubmitStatus("error");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("teamName", teamName);
+    formData.append("track", selectedTrack);
+    formData.append("members", JSON.stringify(teamMembers));
+    if (paymentScreenshot) {
+      formData.append("paymentScreenshot", paymentScreenshot);
+    }
 
     try {
-      const response = await fetch("https://gietx.onrender.com/api/team/register", {
+      const response = await fetch("http://localhost:8000/api/team/register", {
         method: "POST",
         body: formData,
-      })
+      });
 
-      const result = await response.json()
+      const result = await response.json();
       if (response.ok) {
-        setSubmitStatus("success")
-        setTeamName("")
-        setSelectedTrack("")
-        setTeamMembers([{ name: "", email: "", role: "" }])
-        setPaymentScreenshot(null)
-        setPreviewURL(null)
+        setSubmitStatus("success");
+        setTeamName("");
+        setSelectedTrack("");
+        setTeamMembers([{ name: "", email: "", contactNo: "", gender: "" }]);
+        setPaymentScreenshot(null);
+        setPreviewURL(null);
       } else {
-        throw new Error(result.message || "Failed to submit registration")
+        throw new Error(result.message || "Failed to submit registration");
       }
     } catch (error: any) {
-      setSubmitStatus("error")
-      setErrorMessage(error.message || "Submission failed. Try again.")
+      setSubmitStatus("error");
+      setErrorMessage(error.message || "Submission failed. Try again.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <section className="py-8 md:py-16 bg-[#0a0a0a] text-white min-h-screen flex items-center">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           <div className="bg-gray-900 p-4 sm:p-6 md:p-8 rounded-lg shadow-lg border border-gray-700">
-            <h2 className="text-3xl font-bold text-center mb-8">Team Registration</h2>
+            <h2 className="text-3xl font-bold text-center mb-8">
+              Team Registration
+            </h2>
 
             {submitStatus === "success" && (
-              <div className="flex flex-col items-center justify-center text-green-400 p-4 bg-green-900/20 rounded-lg">
+              <div className="flex flex-col items-center justify-center text-green-400 p-4 bg-green-900/20 rounded-lg mb-6">
                 <div className="flex items-center mb-2">
-                  <CheckCircle className="w-6 h-6 mr-2" /> Registration Successful!
+                  <CheckCircle className="w-6 h-6 mr-2" /> Registration
+                  Successful!
                 </div>
-                <p className="text-center">Stay tuned, you will get back from the coordinator.</p>
+                <p className="text-center">
+                  Stay tuned, you will get back from the coordinator.
+                </p>
               </div>
             )}
             {submitStatus === "error" && (
-              <div className="flex items-center justify-center text-red-400">
+              <div className="flex items-center justify-center text-red-400 mb-6">
                 <XCircle className="w-6 h-6 mr-2" /> {errorMessage}
               </div>
             )}
@@ -158,43 +204,68 @@ const RegistrationForm = () => {
 
               {/* Team Members */}
               <div>
-                <label className="block text-blue-400 mb-2">Team Members (Max 5)</label>
+                <label className="block text-blue-400 mb-2">
+                  Team Members (Max 5)
+                </label>
                 {teamMembers.map((member, index) => (
-                  <div key={index} className="flex flex-col md:flex-row gap-3 mb-4">
-                    <input
-                      type="text"
-                      value={member.name}
-                      onChange={(e) => handleMemberChange(index, "name", e.target.value)}
-                      placeholder="Name"
-                      required
-                      className="w-full md:w-1/3 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
-                    />
-                    <input
-                      type="email"
-                      value={member.email}
-                      onChange={(e) => handleMemberChange(index, "email", e.target.value)}
-                      placeholder="Email"
-                      required
-                      className="w-full md:w-1/3 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
-                    />
-                    <div className="flex items-center gap-3">
+                  <div key={index} className="flex flex-col gap-3 mb-4">
+                    <div className="flex flex-col md:flex-row gap-3">
                       <input
                         type="text"
-                        value={member.role}
-                        onChange={(e) => handleMemberChange(index, "role", e.target.value)}
-                        placeholder="Role"
+                        value={member.name}
+                        onChange={(e) =>
+                          handleMemberChange(index, "name", e.target.value)
+                        }
+                        placeholder="Name"
                         required
-                        className="w-full md:w-auto flex-1 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                        className="w-full md:w-1/2 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
                       />
-                      {teamMembers.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveMember(index)}
-                          className="text-red-500 p-2 hover:bg-gray-800 rounded-full transition-colors"
+                      <input
+                        type="email"
+                        value={member.email}
+                        onChange={(e) =>
+                          handleMemberChange(index, "email", e.target.value)
+                        }
+                        placeholder="Email"
+                        required
+                        className="w-full md:w-1/2 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                      />
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-3 items-center">
+                      <input
+                        type="tel"
+                        value={member.contactNo}
+                        onChange={(e) =>
+                          handleMemberChange(index, "contactNo", e.target.value)
+                        }
+                        placeholder="Contact Number"
+                        required
+                        className="w-full md:w-1/2 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                      />
+                      <div className="w-full md:w-1/2 flex items-center">
+                        <select
+                          value={member.gender}
+                          onChange={(e) =>
+                            handleMemberChange(index, "gender", e.target.value)
+                          }
+                          required
+                          className="w-full px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
                         >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      )}
+                          <option value="">Select Gender</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </select>
+                        {teamMembers.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveMember(index)}
+                            className="text-red-500 p-2 hover:bg-gray-800 rounded-full transition-colors ml-2"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -204,14 +275,37 @@ const RegistrationForm = () => {
                     onClick={handleAddMember}
                     className="text-green-400 flex items-center space-x-2"
                   >
-                    <PlusCircle /> <span>Add Member</span>
+                    <PlusCircle className="w-5 h-5" /> <span>Add Member</span>
                   </button>
                 )}
+              </div>
+              <div className="pt-4">
+                <div className="bg-zinc-800 border-l-4 border-purple-500 text-white p-4 rounded">
+                  <div className="flex">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-blue-500 mr-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <p className="text-sm text-zinc-300">
+                      Minimum one female member is required for this team.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Payment Screenshot Upload */}
               <div>
-                <label className="block text-blue-400 mb-2">Upload Payment Screenshot</label>
+                <label className="block text-blue-400 mb-2">
+                  Upload Payment Screenshot
+                </label>
                 <div className="border-2 border-dashed border-gray-700 rounded-lg p-4 text-center">
                   <input
                     type="file"
@@ -219,6 +313,7 @@ const RegistrationForm = () => {
                     onChange={handlePaymentScreenshotChange}
                     className="hidden"
                     id="payment-screenshot"
+                    required
                   />
                   {!previewURL ? (
                     <label
@@ -226,7 +321,9 @@ const RegistrationForm = () => {
                       className="flex flex-col items-center justify-center cursor-pointer py-4"
                     >
                       <Upload className="w-8 h-8 mb-2 text-blue-400" />
-                      <span className="text-sm text-gray-400">Click to upload payment screenshot</span>
+                      <span className="text-sm text-gray-400">
+                        Click to upload payment screenshot
+                      </span>
                     </label>
                   ) : (
                     <div className="relative">
@@ -238,8 +335,8 @@ const RegistrationForm = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setPaymentScreenshot(null)
-                          setPreviewURL(null)
+                          setPaymentScreenshot(null);
+                          setPreviewURL(null);
                         }}
                         className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
                       >
@@ -272,8 +369,7 @@ const RegistrationForm = () => {
         </motion.div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default RegistrationForm
-
+export default RegistrationForm;
