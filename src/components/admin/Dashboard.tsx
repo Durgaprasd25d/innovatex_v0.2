@@ -10,7 +10,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/team");
+        const response = await fetch("https://gietx.onrender.com/api/team");
         const data = await response.json();
         setTeams(data);
       } catch (error) {
@@ -35,7 +35,7 @@ const Dashboard = () => {
   const verifyTeam = async (teamName) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/verify/${teamName}`,
+        `https://gietx.onrender.com/api/admin/verify/${teamName}`,
         {
           method: "PUT",
         }
@@ -69,7 +69,7 @@ const Dashboard = () => {
   const deleteTeam = async (teamId) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/delete/${teamId}`,
+        `https://gietx.onrender.com/api/admin/delete/${teamId}`,
         { method: "DELETE" }
       );
 

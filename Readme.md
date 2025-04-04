@@ -108,6 +108,11 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 ## 📜 License
 This project is open-source and available under the MIT License.
 
+
+<!-- Prize will be update
+Problem statement will be chnage
+faculty corrdinator will add -->
+
 ---
 
 Happy Coding! 🚀

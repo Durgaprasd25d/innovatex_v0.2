@@ -116,7 +116,7 @@ const RegistrationForm = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/team/register", {
+      const response = await fetch("https://gietx.onrender.com/api/team/register", {
         method: "POST",
         body: formData,
       });
