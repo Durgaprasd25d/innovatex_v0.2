@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, Twitter, Instagram, Facebook, Linkedin, Github, ArrowRight } from 'lucide-react';
+import { Instagram, Facebook, Linkedin, Globe, Mail, Phone, ArrowRight } from 'lucide-react'; // Added missing imports
 import { motion } from 'framer-motion';
 
 // Replace these with your actual image imports
@@ -23,16 +23,15 @@ const Footer = () => {
     sponsor7,
   ];
   const socialMedia = [
-    { icon: Twitter, url: 'https://twitter.com' },
-    { icon: Instagram, url: 'https://instagram.com' },
-    { icon: Facebook, url: 'https://facebook.com' },
-    { icon: Linkedin, url: 'https://linkedin.com' },
-    { icon: Github, url: 'https://github.com' },
+    { icon: Instagram, url: 'https://www.instagram.com/innovatex_4.0_giet?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
+    { icon: Facebook, url: 'https://www.facebook.com/gietbaniatangibbsr' },
+    { icon: Linkedin, url: 'https://www.linkedin.com/in/gandhi-institute-for-education-and-technology-khurda-a093ab64/' },
+    { icon: Globe, url: 'https://giet.edu.in/' }, // Replaced GitHub with Website (Globe icon)
   ];
 
   return (
     <footer className="bg-[#0a0a0a] py-12 border-t border-gray-800">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Sponsors/Partners Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -43,7 +42,7 @@ const Footer = () => {
           <h3 className="text-xl font-semibold text-white mb-6 text-center">
             In Association With
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {sponsors.map((sponsor, index) => (
               <motion.div
                 key={index}
@@ -138,7 +137,7 @@ const Footer = () => {
               </motion.button>
             </form>
 
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 justify-center">
               {socialMedia.map((social, index) => (
                 <motion.a
                   key={index}
@@ -148,7 +147,7 @@ const Footer = () => {
                   whileHover={{ y: -3 }}
                   className="bg-gray-800 p-2 rounded-full text-gray-400 hover:text-white transition-colors"
                 >
-                  <social.icon className="w-5 h-5" />
+                  {React.createElement(social.icon, { className: "w-5 h-5" })}
                 </motion.a>
               ))}
             </div>
