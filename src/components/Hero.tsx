@@ -1,19 +1,12 @@
 import { motion } from "framer-motion";
 import { Rocket, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Hero = () => {
-  const handleRegisterClick = () => {
-    const registerSection = document.querySelector("#register");
-    if (registerSection) {
-      const navHeight = 64; // Height of the navbar
-      const elementPosition = registerSection.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+  const navigate = useNavigate(); // Initialize useNavigate
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
+  const handleRegisterClick = () => {
+    navigate("/team"); // Navigate to the "/team" route
   };
 
   return (
@@ -125,21 +118,19 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.7 }}
         >
-          <a href="/register">
-            <motion.div
-              className="flex justify-center items-center min-h-[100px]" // Center horizontally and vertically
+          <motion.div
+            className="flex justify-center items-center min-h-[100px]" // Center horizontally and vertically
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleRegisterClick} // Use the handler for navigation
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold glow-effect flex items-center space-x-2"
             >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleRegisterClick}
-                className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold glow-effect flex items-center space-x-2"
-              >
-                <span>Register Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-            </motion.div>
-          </a>
+              <span>Register Now</span>
+              <ArrowRight className="w-5 h-5" />
+            </motion.button>
+          </motion.div>
         </motion.div>
 
         {/* Countdown timer placeholder */}
