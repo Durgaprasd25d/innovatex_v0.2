@@ -140,8 +140,10 @@ const RegistrationForm = () => {
   };
 
   return (
+     <>
+     <PaymentUpload/>
     <section className="py-8 md:py-16 bg-[#0a0a0a] text-white min-h-screen flex items-center">
-      <PaymentUpload/>
+      
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -353,6 +355,7 @@ const RegistrationForm = () => {
         </motion.div>
       </div>
     </section>
+    </>
   );
 };
 
