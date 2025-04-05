@@ -1,6 +1,9 @@
 import type React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import PaymentUpload from "./PaymentUpload";
+
+
 import {
   Send,
   Loader2,
@@ -11,12 +14,15 @@ import {
   PlusCircle,
 } from "lucide-react";
 
+
+
 interface TeamMember {
   name: string;
   email: string;
   contactNo: string;
   gender: string;
 }
+
 
 const RegistrationForm = () => {
   const [teamName, setTeamName] = useState("");
@@ -33,9 +39,9 @@ const RegistrationForm = () => {
   const [previewURL, setPreviewURL] = useState<string | null>(null);
 
   const tracks = [
-    { id: "blockchain", name: "Blockchain & Web3" },
-    { id: "ai", name: "AI & Machine Learning" },
-    { id: "innovation", name: "Open Innovation" },
+    { id: "haxkathon", name: "Hackathon" },
+    // { id: "ai", name: "AI & Machine Learning" },
+    // { id: "innovation", name: "Open Innovation" },
   ];
 
   /** Add a new team member */
@@ -140,9 +146,16 @@ const RegistrationForm = () => {
     }
   };
 
+
+
   return (
+
+    
     <section className="py-8 md:py-16 bg-[#0a0a0a] text-white min-h-screen flex items-center">
+        <PaymentUpload/>
+      
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

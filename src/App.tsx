@@ -14,6 +14,8 @@ import Footer from "./components/Footer"
 import RegistrationForm from "./components/RegistrationForm"
 import PaymentUpload from "./components/PaymentUpload"
 import Dashboard from "./components/admin/Dashboard"
+import ComingSoon from "./components/CommingSoon"
+import Guideline from "./components/Guidline"
 
 function MainLayout() {
   return (
@@ -40,8 +42,8 @@ function App() {
                 <Timeline />
                 <Tracks />
                 <Prizes />
-                <PaymentUpload />
-                <RegistrationForm />
+                
+              
                 <Sponsors />
                 <FAQ />
                 <Team />
@@ -52,6 +54,17 @@ function App() {
 
           {/* Dashboard Page */}
           <Route path="hakathon-dashboard" element={<Dashboard />} />
+          <Route path="register" element={<RegistrationForm />} />
+          <Route path="tracks" element={<Tracks />} />
+          <Route path="timeline" element={<Timeline />} />
+          <Route path="prizes" element={<Prizes />} />
+          <Route path="sponsors" element={<Sponsors />} />
+          <Route path="faq" element={<FAQ/>} />
+          <Route path="team" element={<Team />} />
+          <Route path="commingsoon" element={<ComingSoon />} />
+          <Route path="guideline" element={<Guideline />} />
+          
+          
         </Route>
       </Routes>
     </Router>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Code2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,64 +16,56 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
   const menuItems = [
-    { name: 'Home', href: '#' },
-    { name: 'Tracks', href: '#tracks' },
-    { name: 'Timeline', href: '#timeline' },
-    { name: 'Prizes', href: '#prizes' },
-    { name: 'Sponsors', href: '#sponsors' },
-    { name: 'FAQ', href: '#faq' },
-    { name: 'Team', href: '#team' }
+    { name: 'Home', path: "/" },
+    { name: 'Tracks', path: "/tracks" },
+    { name: 'Timeline', path: "/timeline" },
+    { name: 'Prizes', path: "/prizes" },
+    { name: 'Sponsors', path: "/sponsors" },
+    { name: 'Guidelines', path: "/guideline" },
+    { name: 'Team', path: "/team" }
   ];
-
-  const handleNavClick = (href: string) => {
-    setIsOpen(false); // Close mobile menu when clicking a link
-    const element = document.querySelector(href);
-    if (element) {
-      const navHeight = 64; // Height of the navbar
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navHeight;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-glass' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <a href="#" onClick={() => handleNavClick('#')} className="flex items-center">
+            <NavLink to="/" className="flex items-center">
               <Code2 className="h-8 w-8 text-blue-500" />
               <span className="ml-2 text-xl font-bold text-gradient">InnovateX</span>
-            </a>
+            </NavLink>
           </div>
 
           <div className="hidden md:block">
             <div className="flex items-center space-x-8">
               {menuItems.map((item) => (
-                <a
+                <NavLink
                   key={item.name}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.href);
-                  }}
-                  className="text-gray-300 hover:text-blue-500 transition-colors duration-200"
+                  to={item.path}
+                  className={({ isActive }) => 
+                    `text-gray-300 hover:text-blue-500 transition-colors duration-200 ${
+                      isActive ? 'text-blue-500 font-medium' : ''
+                    }`
+                  }
                 >
                   {item.name}
-                </a>
+                </NavLink>
               ))}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={() => handleNavClick('#register')}
-                className="px-6 py-2 rounded-full bg-blue-600 text-white glow-effect"
-              >
-                Register Now
-              </motion.button>
+             
+              <NavLink to="/register">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  className="px-6 py-2 rounded-full bg-blue-600 text-white glow-effect"
+                >
+                  Register Now
+                </motion.button>
+              </NavLink>
             </div>
           </div>
 
@@ -96,24 +90,23 @@ const Navbar = () => {
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {menuItems.map((item) => (
-              <a
+              <NavLink
                 key={item.name}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item.href);
-                }}
-                className="block px-3 py-2 text-gray-300 hover:text-blue-500"
+                to={item.path}
+                className={({ isActive }) => 
+                  `block px-3 py-2 text-gray-300 hover:text-blue-500 ${
+                    isActive ? 'text-blue-500 font-medium' : ''
+                  }`
+                }
               >
                 {item.name}
-              </a>
+              </NavLink>
             ))}
-            <button
-              onClick={() => handleNavClick('#register')}
-              className="w-full px-3 py-2 rounded-full bg-blue-600 text-white glow-effect"
-            >
-              Register Now
-            </button>
+            <NavLink to="/register">
+              <button className="w-full px-3 py-2 rounded-full bg-blue-600 text-white glow-effect">
+                Register Now
+              </button>
+            </NavLink>
           </div>
         </motion.div>
       )}

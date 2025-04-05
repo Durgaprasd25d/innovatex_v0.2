@@ -36,28 +36,72 @@ const CountdownTimer = () => {
 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <motion.div
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="flex flex-col items-center p-4"
+      key={`${label}-${value}`}
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+      className="flex flex-col items-center mx-1 sm:mx-2 md:mx-3"
     >
-      <div className="text-4xl md:text-6xl font-bold text-blue-500">
-        {value.toString().padStart(2, "0")}
+      <div className="relative">
+        <motion.div
+          className="absolute inset-0 bg-blue-500/10 rounded-lg blur-sm"
+          animate={{
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+          }}
+        />
+        <div className="relative text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-blue-400 to-blue-600 px-3 py-2 sm:px-4 sm:py-3">
+          {value.toString().padStart(2, "0")}
+        </div>
       </div>
-      <div className="text-sm text-gray-400 uppercase">{label}</div>
+      <div className="text-xs sm:text-sm text-gray-400 uppercase mt-1 sm:mt-2">
+        {label}
+      </div>
+    </motion.div>
+  );
+
+  const Separator = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex items-center justify-center text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold text-blue-400 mx-1 sm:mx-2"
+    >
+      :
     </motion.div>
   );
 
   return (
-    <div className="w-full py-12 bg-[#0a0a0a] text-white flex justify-center items-center">
-      <div className="flex space-x-3 sm:space-x-6 md:space-x-8">
+    <div className="w-full py-8 sm:py-12 bg-gradient-to-b from-[#0a0a0a] to-[#1a1a2e] text-white flex flex-col items-center">
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-xl sm:text-2xl md:text-3xl font-medium text-gray-300 mb-4 sm:mb-6"
+      >
+        Countdown to InnovateX 2025
+      </motion.h2>
+      
+      <div className="flex items-center justify-center">
         <TimeUnit value={timeLeft.days} label="Days" />
-        <div className="text-4xl md:text-6xl font-bold text-blue-500">:</div>
+        <Separator />
         <TimeUnit value={timeLeft.hours} label="Hours" />
-        <div className="text-4xl md:text-6xl font-bold text-blue-500">:</div>
+        <Separator />
         <TimeUnit value={timeLeft.minutes} label="Minutes" />
-        <div className="text-4xl md:text-6xl font-bold text-blue-500">:</div>
+        <Separator />
         <TimeUnit value={timeLeft.seconds} label="Seconds" />
       </div>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="text-xs sm:text-sm text-gray-500 mt-6 text-center max-w-md px-4"
+      >
+        April 16, 2025 | 00:00 UTC
+      </motion.p>
     </div>
   );
 };
