@@ -6,7 +6,7 @@ const Hero = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleRegisterClick = () => {
-    navigate("/team"); // Navigate to the "/team" route
+    navigate("/register"); // Navigate to the "/team" route
   };
 
   return (
