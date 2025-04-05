@@ -1,9 +1,6 @@
 import type React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import PaymentUpload from "./PaymentUpload";
-
-
 import {
   Send,
   Loader2,
@@ -13,8 +10,7 @@ import {
   Trash2,
   PlusCircle,
 } from "lucide-react";
-
-
+import PaymentUpload from "./PaymentUpload";
 
 interface TeamMember {
   name: string;
@@ -22,7 +18,6 @@ interface TeamMember {
   contactNo: string;
   gender: string;
 }
-
 
 const RegistrationForm = () => {
   const [teamName, setTeamName] = useState("");
@@ -39,7 +34,7 @@ const RegistrationForm = () => {
   const [previewURL, setPreviewURL] = useState<string | null>(null);
 
   const tracks = [
-    { id: "haxkathon", name: "Hackathon" },
+    { id: "hackathon", name: "Hackathon" },
     // { id: "ai", name: "AI & Machine Learning" },
     // { id: "innovation", name: "Open Innovation" },
   ];
@@ -100,7 +95,6 @@ const RegistrationForm = () => {
       return;
     }
 
-    // Validate that all team members have required fields
     const isAllMembersValid = teamMembers.every(
       (member) =>
         member.name && member.email && member.contactNo && member.gender
@@ -126,7 +120,6 @@ const RegistrationForm = () => {
         method: "POST",
         body: formData,
       });
-
       const result = await response.json();
       if (response.ok) {
         setSubmitStatus("success");
@@ -146,65 +139,63 @@ const RegistrationForm = () => {
     }
   };
 
-
-
   return (
-
-    
     <section className="py-8 md:py-16 bg-[#0a0a0a] text-white min-h-screen flex items-center">
-        <PaymentUpload/>
-      
-      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
-        
+      <PaymentUpload/>
+      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           <div className="bg-gray-900 p-4 sm:p-6 md:p-8 rounded-lg shadow-lg border border-gray-700">
-            <h2 className="text-3xl font-bold text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">
               Team Registration
             </h2>
 
             {submitStatus === "success" && (
-              <div className="flex flex-col items-center justify-center text-green-400 p-4 bg-green-900/20 rounded-lg mb-6">
+              <div className="flex flex-col items-center justify-center text-green-400 p-4 bg-green-900/20 rounded-lg mb-4 sm:mb-6">
                 <div className="flex items-center mb-2">
-                  <CheckCircle className="w-6 h-6 mr-2" /> Registration
-                  Successful!
+                  <CheckCircle className="w-6 h-6 mr-2" /> Registration Successful!
                 </div>
-                <p className="text-center">
+                <p className="text-sm sm:text-base text-center">
                   Stay tuned, you will get back from the coordinator.
                 </p>
               </div>
             )}
+
             {submitStatus === "error" && (
-              <div className="flex items-center justify-center text-red-400 mb-6">
+              <div className="flex items-center justify-center text-red-400 mb-4 sm:mb-6">
                 <XCircle className="w-6 h-6 mr-2" /> {errorMessage}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Team Name */}
               <div>
-                <label className="block text-blue-400 mb-2">Team Name</label>
+                <label className="block text-blue-400 text-sm sm:text-base mb-2">
+                  Team Name
+                </label>
                 <input
                   type="text"
                   value={teamName}
                   onChange={(e) => setTeamName(e.target.value)}
                   required
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-400"
                   placeholder="Enter your team name"
                 />
               </div>
 
               {/* Track Selection */}
               <div>
-                <label className="block text-blue-400 mb-2">Select Track</label>
+                <label className="block text-blue-400 text-sm sm:text-base mb-2">
+                  Select Track
+                </label>
                 <select
                   value={selectedTrack}
                   onChange={(e) => setSelectedTrack(e.target.value)}
                   required
-                  className="w-full px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded-lg border border-gray-700 text-white"
                 >
                   <option value="">Select a track</option>
                   {tracks.map((track) => (
@@ -217,12 +208,12 @@ const RegistrationForm = () => {
 
               {/* Team Members */}
               <div>
-                <label className="block text-blue-400 mb-2">
+                <label className="block text-blue-400 text-sm sm:text-base mb-2">
                   Team Members (Max 5)
                 </label>
                 {teamMembers.map((member, index) => (
-                  <div key={index} className="flex flex-col gap-3 mb-4">
-                    <div className="flex flex-col md:flex-row gap-3">
+                  <div key={index} className="flex flex-col gap-2 sm:gap-3 mb-4">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       <input
                         type="text"
                         value={member.name}
@@ -231,7 +222,7 @@ const RegistrationForm = () => {
                         }
                         placeholder="Name"
                         required
-                        className="w-full md:w-1/2 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                        className="w-full sm:w-1/2 px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-400"
                       />
                       <input
                         type="email"
@@ -241,10 +232,10 @@ const RegistrationForm = () => {
                         }
                         placeholder="Email"
                         required
-                        className="w-full md:w-1/2 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                        className="w-full sm:w-1/2 px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-400"
                       />
                     </div>
-                    <div className="flex flex-col md:flex-row gap-3 items-center">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-center">
                       <input
                         type="tel"
                         value={member.contactNo}
@@ -253,16 +244,16 @@ const RegistrationForm = () => {
                         }
                         placeholder="Contact Number"
                         required
-                        className="w-full md:w-1/2 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                        className="w-full sm:w-1/2 px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-400"
                       />
-                      <div className="w-full md:w-1/2 flex items-center">
+                      <div className="w-full sm:w-1/2 flex items-center">
                         <select
                           value={member.gender}
                           onChange={(e) =>
                             handleMemberChange(index, "gender", e.target.value)
                           }
                           required
-                          className="w-full px-4 py-2 bg-gray-800 rounded-lg border border-gray-700 text-white"
+                          className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded-lg border border-gray-700 text-white"
                         >
                           <option value="">Select Gender</option>
                           <option value="male">Male</option>
@@ -286,40 +277,19 @@ const RegistrationForm = () => {
                   <button
                     type="button"
                     onClick={handleAddMember}
-                    className="text-green-400 flex items-center space-x-2"
+                    className="text-green-400 flex items-center space-x-2 text-sm sm:text-base"
                   >
                     <PlusCircle className="w-5 h-5" /> <span>Add Member</span>
                   </button>
                 )}
               </div>
-              <div className="pt-4">
-                <div className="bg-zinc-800 border-l-4 border-purple-500 text-white p-4 rounded">
-                  <div className="flex">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-blue-500 mr-2"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <p className="text-sm text-zinc-300">
-                      Minimum one female member is required for this team.
-                    </p>
-                  </div>
-                </div>
-              </div>
 
               {/* Payment Screenshot Upload */}
               <div>
-                <label className="block text-blue-400 mb-2">
+                <label className="block text-blue-400 text-sm sm:text-base mb-2">
                   Upload Payment Screenshot
                 </label>
-                <div className="border-2 border-dashed border-gray-700 rounded-lg p-4 text-center">
+                <div className="border-2 border-dashed border-gray-700 rounded-lg p-4 sm:p-6 text-center">
                   <input
                     type="file"
                     accept="image/*"
@@ -334,7 +304,7 @@ const RegistrationForm = () => {
                       className="flex flex-col items-center justify-center cursor-pointer py-4"
                     >
                       <Upload className="w-8 h-8 mb-2 text-blue-400" />
-                      <span className="text-sm text-gray-400">
+                      <span className="text-xs sm:text-sm text-gray-400">
                         Click to upload payment screenshot
                       </span>
                     </label>
@@ -360,10 +330,11 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 sm:py-4 rounded-full flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
               >
                 {isSubmitting ? (
                   <>
