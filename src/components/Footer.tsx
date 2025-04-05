@@ -47,7 +47,7 @@ const Footer = () => {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.05 }}
-                className="bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-24"
+                className=" p-4 rounded-lg flex items-center justify-center h-24"
               >
                 <img
                   src={sponsor}

@@ -266,14 +266,16 @@ const HackathonGuidelines = () => {
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
             Still have questions? Reach out to our organizers at hackathon@innovatex.dev
           </p>
-          <motion.button
+          
+          <a href="/team">
+            <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white font-medium glow-effect"
           >
             <Mail className="inline mr-2 w-5 h-5" />
             Contact Organizers
-          </motion.button>
+          </motion.button></a>
         </motion.div>
       </div>
     </div>

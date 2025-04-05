@@ -33,7 +33,7 @@
 //             Prizes
 //           </h2>
 //         </div>
-        
+
 //         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 //           {prizes.map((prize) => (
 //             <motion.div
@@ -60,10 +60,9 @@
 
 // export default Prizes;
 
-
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Trophy, Zap, Gift } from 'lucide-react';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Trophy, Zap, Gift } from "lucide-react";
 
 const Prizes = () => {
   const [revealed, setRevealed] = useState(false);
@@ -74,9 +73,16 @@ const Prizes = () => {
 
   // Prize data for 1st, 2nd, and 3rd place
   const prizeData = [
-    { title: '1st Place', amount: '₹?', icon: <Trophy className="w-12 h-12 text-yellow-400" /> },
-    { title: '2nd Place', amount: '₹?', icon: <Trophy className="w-12 h-12 text-gray-400" /> },
-    { title: '3rd Place', amount: '₹?', icon: <Trophy className="w-12 h-12 text-amber-700" /> },
+    {
+      title: "Winner",
+      amount: "",
+      icon: <Trophy className="w-12 h-12 text-yellow-400" />,
+    },
+    {
+      title: "1st Runners Up",
+      amount: "",
+      icon: <Trophy className="w-12 h-12 text-gray-400" />,
+    },
   ];
 
   return (
@@ -93,32 +99,32 @@ const Prizes = () => {
           <motion.div
             animate={{
               scale: [1, 1.05, 1],
-              rotate: [0, 5, -5, 0]
+              rotate: [0, 5, -5, 0],
             }}
             transition={{
               duration: 2,
               repeat: Infinity,
-              repeatType: 'reverse'
+              repeatType: "reverse",
             }}
             className="flex justify-center mb-6"
           >
             <div className="relative">
               <Trophy className="w-12 h-12 text-yellow-500 z-10 relative" />
-              <motion.div 
+              <motion.div
                 className="absolute -inset-2 bg-yellow-500 rounded-full blur-lg opacity-30"
                 animate={{
                   scale: [1, 1.3, 1],
-                  opacity: [0.3, 0.6, 0.3]
+                  opacity: [0.3, 0.6, 0.3],
                 }}
                 transition={{
                   duration: 3,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
                 }}
               />
             </div>
           </motion.div>
-          
+
           <h2 className="text-3xl md:text-4xl font-bold text-gradient mb-4">
             Prize Pool
           </h2>
@@ -133,7 +139,7 @@ const Prizes = () => {
               <motion.div
                 initial={{ scale: 0.5 }}
                 animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 200 }}
+                transition={{ type: "spring", stiffness: 200 }}
                 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600 mb-4"
               >
                 ₹1,00,000
@@ -153,57 +159,63 @@ const Prizes = () => {
           </p>
         </motion.div>
 
-        {/* Prize Tiers */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {prizeData.map((prize, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ 
-                delay: index * 0.2,
-                type: 'spring',
-                stiffness: 100
-              }}
-              className="relative group"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl blur opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-              
-              <div className="relative p-8 rounded-xl bg-glass border border-gray-800 group-hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col items-center justify-center">
-                <motion.div
-                  animate={{
-                    rotate: [0, 5, -5, 0],
-                    scale: [1, 1.05, 1]
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    repeatType: 'reverse'
-                  }}
-                  className="mb-6"
-                >
-                  {prize.icon}
-                </motion.div>
-                
-                <h3 className="text-xl font-semibold text-white mb-2">{prize.title}</h3>
-                <div className="text-2xl font-bold text-gradient">{prize.amount}</div>
-                
-                <motion.div
-                  animate={{
-                    opacity: [0.4, 0.8, 0.4]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity
-                  }}
-                  className="mt-6 text-gray-400 text-sm"
-                >
-                  Exciting rewards for top performers
-                </motion.div>
-              </div>
-            </motion.div>
-          ))}
+        {/* Prize Tiers - Centered */}
+        <div className="flex justify-center px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl w-full mx-auto">
+            {prizeData.map((prize, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: index * 0.2,
+                  type: "spring",
+                  stiffness: 100,
+                }}
+                className="relative group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl blur opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
+
+                <div className="relative p-8 rounded-xl bg-glass border border-gray-800 group-hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col items-center justify-center">
+                  <motion.div
+                    animate={{
+                      rotate: [0, 5, -5, 0],
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                    }}
+                    className="mb-6"
+                  >
+                    {prize.icon}
+                  </motion.div>
+
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    {prize.title}
+                  </h3>
+                  <div className="text-2xl font-bold text-gradient">
+                    {prize.amount}
+                  </div>
+
+                  <motion.div
+                    animate={{
+                      opacity: [0.4, 0.8, 0.4],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                    }}
+                    className="mt-6 text-gray-400 text-sm"
+                  >
+                    Exciting rewards for top performers
+                  </motion.div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* Special Categories */}
@@ -218,7 +230,7 @@ const Prizes = () => {
             <Zap className="w-6 h-6 text-blue-400 mr-2" />
             Special Categories
           </h3>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -227,7 +239,12 @@ const Prizes = () => {
             className="bg-glass p-6 rounded-xl border border-gray-800 max-w-2xl mx-auto"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {['Best Design', 'Most Innovative', "People's Choice", 'Best First Hack'].map((category, index) => (
+              {[
+                "Best Design",
+                "Most Innovative",
+                "People's Choice",
+                "Best First Hack",
+              ].map((category, index) => (
                 <motion.div
                   key={category}
                   initial={{ opacity: 0 }}
