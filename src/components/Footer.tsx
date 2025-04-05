@@ -1,26 +1,89 @@
 import React from 'react';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Twitter, Instagram, Facebook, Linkedin, Github, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+// Replace these with your actual image imports
+import sponsor1 from './Layer 3.png';
+import sponsor2 from './iic.jpg';
+import sponsor3 from './bput.jpg';
+import sponsor4 from './Nirf.jpg';
+import sponsor5 from './AICTE.jpg';
+import sponsor6 from './Nba.jpg';
+import sponsor7 from './Naac.jpg';
 
 const Footer = () => {
   const quickLinks = ['Home', 'Tracks', 'Prizes', 'FAQ', 'Contact Us'];
+  const sponsors = [
+    sponsor1,
+    sponsor2,
+    sponsor3,
+    sponsor4,
+    sponsor5,
+    sponsor6,
+    sponsor7,
+  ];
+  const socialMedia = [
+    { icon: Twitter, url: 'https://twitter.com' },
+    { icon: Instagram, url: 'https://instagram.com' },
+    { icon: Facebook, url: 'https://facebook.com' },
+    { icon: Linkedin, url: 'https://linkedin.com' },
+    { icon: Github, url: 'https://github.com' },
+  ];
 
   return (
     <footer className="bg-[#0a0a0a] py-12 border-t border-gray-800">
       <div className="max-w-6xl mx-auto px-4">
+        {/* Sponsors/Partners Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-10"
+        >
+          <h3 className="text-xl font-semibold text-white mb-6 text-center">
+            In Association With
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
+            {sponsors.map((sponsor, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                className="bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-24"
+              >
+                <img
+                  src={sponsor}
+                  alt={`Sponsor ${index + 1}`}
+                  className="max-h-16 max-w-full object-contain"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null; // Prevent infinite loop
+                    target.src = 'https://via.placeholder.com/150'; // Placeholder image
+                  }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Quick Links */}
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
-                <li key={link}>
+                <motion.li
+                  key={link}
+                  whileHover={{ x: 5 }}
+                >
                   <a
                     href={`#${link.toLowerCase().replace(' ', '-')}`}
-                    className="text-gray-400 hover:text-blue-500 transition-colors"
+                    className="text-gray-400 hover:text-blue-500 transition-colors flex items-center"
                   >
+                    <ArrowRight className="w-4 h-4 mr-2 text-blue-500" />
                     {link}
                   </a>
-                </li>
+                </motion.li>
               ))}
             </ul>
           </div>
@@ -28,57 +91,73 @@ const Footer = () => {
           {/* Contact Information */}
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Contact Us</h3>
-            <div className="space-y-2">
-              <div className="flex items-center text-gray-400">
-                <Mail className="w-5 h-5 mr-2" />
-                <a href="mailto:shibammohanty8658@gmail.com" className="hover:text-blue-500 transition-colors">
+            <div className="space-y-3">
+              <div className="flex items-center text-gray-400 hover:text-blue-500 transition-colors">
+                <Mail className="w-5 h-5 mr-2 text-blue-400" />
+                <a href="mailto:shibammohanty8658@gmail.com">
                   shibammohanty8658@gmail.com
                 </a>
               </div>
-              <div className="flex items-center text-gray-400">
-                <Mail className="w-5 h-5 mr-2" />
-                <a href="mailto:chiranjeebkumarsahoo1@gmail.com" className="hover:text-blue-500 transition-colors">
+              <div className="flex items-center text-gray-400 hover:text-blue-500 transition-colors">
+                <Mail className="w-5 h-5 mr-2 text-blue-400" />
+                <a href="mailto:chiranjeebkumarsahoo1@gmail.com">
                   chiranjeebkumarsahoo1@gmail.com
                 </a>
               </div>
-              <div className="flex items-center text-gray-400">
-                <Phone className="w-5 h-5 mr-2" />
-                <a href="tel:+916371850005" className="hover:text-blue-500 transition-colors">
+              <div className="flex items-center text-gray-400 hover:text-blue-500 transition-colors">
+                <Phone className="w-5 h-5 mr-2 text-blue-400" />
+                <a href="tel:+916371850005">
                   +91 6371850005
                 </a>
-               
               </div>
-              <div className="flex items-center text-gray-400">
-              <Phone className="w-5 h-5 mr-2" />
-                <a href="tel:+918458024651" className="hover:text-blue-500 transition-colors">
+              <div className="flex items-center text-gray-400 hover:text-blue-500 transition-colors">
+                <Phone className="w-5 h-5 mr-2 text-blue-400" />
+                <a href="tel:+918458024651">
                   +91 8458024651
                 </a>
-               
               </div>
             </div>
           </div>
 
-          {/* Newsletter */}
+          {/* Newsletter & Social Media */}
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Stay Updated</h3>
-            <form className="space-y-4">
+            <form className="space-y-4 mb-6">
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500"
               />
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+                className="w-full px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold transition-all"
               >
                 Subscribe
-              </button>
+              </motion.button>
             </form>
+
+            <div className="flex space-x-4">
+              {socialMedia.map((social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -3 }}
+                  className="bg-gray-800 p-2 rounded-full text-gray-400 hover:text-white transition-colors"
+                >
+                  <social.icon className="w-5 h-5" />
+                </motion.a>
+              ))}
+            </div>
           </div>
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
           <p>© 2025 InnovateX. All rights reserved.</p>
+          <p className="mt-2 text-sm">Made with ❤️ by the InnovateX Team</p>
         </div>
       </div>
     </footer>
