@@ -16,11 +16,11 @@ const FAQ = () => {
     },
     {
       question: 'What are the prizes for the winners?',
-      answer: 'The top three teams will receive cash prizes: ₹50,000 for first place, ₹30,000 for second place, and ₹20,000 for third place.',
+      answer: 'The top three teams will receive cash prizes: ₹ for first place, ₹ for second place, and ₹ for third place.',
     },
     {
       question: 'Can I participate as a solo developer?',
-      answer: 'Yes, you can participate either as an individual or as part of a team. However, we encourage team participation for better collaboration and learning.',
+      answer: 'NO, you can participate as part of a team. However, we encourage team participation for better collaboration and learning.',
     },
   ];
 
