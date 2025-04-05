@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Phone } from 'lucide-react';
 import raja from "./raja.jpg"
 import uday from "./uday.jpg"
+import Amita from "./AmitaMAm.jpg"
+import Sovan from "./Sovan.jpg"
 
 const Team = () => {
   const students = [
@@ -58,16 +60,16 @@ const Team = () => {
 
   const faculty = [
     {
-      name: 'Dr. John Doe',
+      name: 'Dr. Amita Rani Das',
       role: 'Faculty Co-ordinator',
-      contact: '+91 9876543210',
-      image: './faculty1.jpg',
+      contact: '+91 7978243636',
+      image: Amita,
     },
     {
-      name: 'Dr. Jane Smith',
+      name: 'Dr. Sovan Sankalp',
       role: 'Faculty Co-ordinator',
-      contact: '+91 9876543211',
-      image: './faculty2.jpg',
+      contact: '+91 700803833',
+      image: Sovan,
     },
   ];
 
