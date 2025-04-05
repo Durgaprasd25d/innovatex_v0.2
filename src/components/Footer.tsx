@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Facebook, Linkedin, Globe, Mail, Phone, ArrowRight } from 'lucide-react'; // Added missing imports
+import { Instagram, Facebook, Linkedin, Globe, Mail, Phone, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Replace these with your actual image imports
@@ -10,6 +10,7 @@ import sponsor4 from './Nirf.jpg';
 import sponsor5 from './AICTE.jpg';
 import sponsor6 from './Nba.jpg';
 import sponsor7 from './Naac.jpg';
+import sponsor8 from './GDG.jpg';
 
 const Footer = () => {
   const quickLinks = ['Home', 'Tracks', 'Prizes', 'FAQ', 'Contact Us'];
@@ -21,16 +22,28 @@ const Footer = () => {
     sponsor5,
     sponsor6,
     sponsor7,
+    sponsor8,
   ];
   const socialMedia = [
     { icon: Instagram, url: 'https://www.instagram.com/innovatex_4.0_giet?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
     { icon: Facebook, url: 'https://www.facebook.com/gietbaniatangibbsr' },
     { icon: Linkedin, url: 'https://www.linkedin.com/in/gandhi-institute-for-education-and-technology-khurda-a093ab64/' },
-    { icon: Globe, url: 'https://giet.edu.in/' }, // Replaced GitHub with Website (Globe icon)
+    { icon: Globe, url: 'https://giet.edu/' },
   ];
 
   return (
     <footer className="bg-[#0a0a0a] py-12 border-t border-gray-800">
+      {/* Hidden scrollbar styles */}
+      <style jsx>{`
+        .sponsors-container::-webkit-scrollbar {
+          display: none;
+        }
+        .sponsors-container {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Sponsors/Partners Section */}
         <motion.div
@@ -42,22 +55,21 @@ const Footer = () => {
           <h3 className="text-xl font-semibold text-white mb-6 text-center">
             In Association With
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          <div className="sponsors-container flex overflow-x-auto py-4 gap-8 items-center">
             {sponsors.map((sponsor, index) => (
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.05 }}
-                className=" p-4 rounded-lg flex items-center justify-center h-24"
+                className="flex-shrink-0 p-4 rounded-lg flex items-center justify-center h-24"
               >
                 <img
                   src={sponsor}
                   alt={`Sponsor ${index + 1}`}
-                  className="max-h-16 max-w-full object-contain"
+                  className="max-h-16 max-w-[120px] object-contain"
                   onError={(e) => {
-                    // Fallback if image fails to load
                     const target = e.target as HTMLImageElement;
-                    target.onerror = null; // Prevent infinite loop
-                    target.src = 'https://via.placeholder.com/150'; // Placeholder image
+                    target.onerror = null;
+                    target.src = 'https://via.placeholder.com/150';
                   }}
                 />
               </motion.div>

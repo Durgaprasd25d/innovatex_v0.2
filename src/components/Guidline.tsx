@@ -19,7 +19,7 @@ const HackathonGuidelines = () => {
       icon: Users,
       title: "Team Composition",
       items: [
-        "Teams of 2-5 participants",
+        "Teams of 2-5 participants (Female Mandatory)",
         "Can be formed before or at the event",
         "Interdisciplinary teams encouraged"
       ]
