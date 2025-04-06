@@ -7,7 +7,7 @@ This is the frontend for the Innovatex Hackathon registration platform. It is bu
 
 ## 🌐 Live Preview
 
-[🔗 Dev Station (Live Site)](https://devstation.netlify.app/)
+[🔗 Dev Station (Live Site)](https://innovatexgiet.netlify.app)
 
 ## 🧰 Tech Stack
 
