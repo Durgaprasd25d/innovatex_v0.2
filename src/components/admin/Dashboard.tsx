@@ -1,66 +1,69 @@
-import { useState, useEffect } from "react";
-import TeamCard from "./TeamCard";
-import Loading from "./loading";
+"use client"
 
-// Define the team structure
+import { useState, useEffect } from "react"
+import TeamCard from "./TeamCard"
+import Loading from "./loading"
+
+// Define the team structure with collegeName
 interface Team {
-  _id: string;
-  teamName: string;
-  isVerified: boolean;
-  confirmationSlip: string;
+  _id: string
+  teamName: string
+  track: string
+  collegeName: string // Added collegeName to the interface
+  members: any[]
+  paymentScreenshot: string
+  isVerified: boolean
+  confirmationSlip: string
 }
 
 // Notification type
 type Notification = {
-  message: string;
-  type: "success" | "error";
-};
+  message: string
+  type: "success" | "error"
+}
 
 const Dashboard = () => {
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [notification, setNotification] = useState<Notification | null>(null);
+  const [teams, setTeams] = useState<Team[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [notification, setNotification] = useState<Notification | null>(null)
 
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await fetch("https://gietx.onrender.com/api/team");
+        const response = await fetch("https://gietx.onrender.com/api/team")
         if (!response.ok) {
-          throw new Error(`Failed to fetch teams: ${response.statusText}`);
+          throw new Error(`Failed to fetch teams: ${response.statusText}`)
         }
-        const data: Team[] = await response.json();
-        setTeams(data);
+        const data: Team[] = await response.json()
+        setTeams(data)
       } catch (error: any) {
-        console.error("Error fetching teams:", error.message || error);
+        console.error("Error fetching teams:", error.message || error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchTeams();
-  }, []);
+    fetchTeams()
+  }, [])
 
   const showNotification = (message: string, type: "success" | "error" = "success") => {
-    setNotification({ message, type });
+    setNotification({ message, type })
     setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-  };
+      setNotification(null)
+    }, 3000)
+  }
 
   const verifyTeam = async (teamName: string): Promise<void> => {
     try {
-      const response = await fetch(
-        `https://gietx.onrender.com/api/admin/verify/${teamName}`,
-        {
-          method: "PUT",
-        }
-      );
+      const response = await fetch(`https://gietx.onrender.com/api/admin/verify/${teamName}`, {
+        method: "PUT",
+      })
 
       if (!response.ok) {
-        throw new Error(`Verification toggle failed: ${response.statusText}`);
+        throw new Error(`Verification toggle failed: ${response.statusText}`)
       }
 
-      const updatedTeam = await response.json();
+      const updatedTeam = await response.json()
 
       setTeams((prevTeams) =>
         prevTeams.map((team) =>
@@ -70,36 +73,33 @@ const Dashboard = () => {
                 isVerified: updatedTeam.team.isVerified,
                 confirmationSlip: updatedTeam.team.confirmationSlip,
               }
-            : team
-        )
-      );
+            : team,
+        ),
+      )
 
-      showNotification(`Team "${teamName}" verification updated.`, "success");
+      showNotification(`Team "${teamName}" verification updated.`, "success")
     } catch (error: any) {
-      console.error("Error toggling verification:", error.message || error);
-      showNotification("Failed to update verification.", "error");
+      console.error("Error toggling verification:", error.message || error)
+      showNotification("Failed to update verification.", "error")
     }
-  };
+  }
 
   const deleteTeam = async (teamId: string): Promise<void> => {
     try {
-      const response = await fetch(
-        `https://gietx.onrender.com/api/admin/delete/${teamId}`,
-        { method: "DELETE" }
-      );
+      const response = await fetch(`https://gietx.onrender.com/api/admin/delete/${teamId}`, { method: "DELETE" })
 
       if (!response.ok) {
-        throw new Error(`Failed to delete team: ${response.statusText}`);
+        throw new Error(`Failed to delete team: ${response.statusText}`)
       }
 
-      setTeams((prevTeams) => prevTeams.filter((team) => team._id !== teamId));
+      setTeams((prevTeams) => prevTeams.filter((team) => team._id !== teamId))
 
-      showNotification("Team deleted successfully.", "success");
+      showNotification("Team deleted successfully.", "success")
     } catch (error: any) {
-      console.error("Error deleting team:", error.message || error);
-      showNotification("Failed to delete team.", "error");
+      console.error("Error deleting team:", error.message || error)
+      showNotification("Failed to delete team.", "error")
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-100 flex flex-col items-center py-10 px-4">
@@ -132,7 +132,8 @@ const Dashboard = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
+

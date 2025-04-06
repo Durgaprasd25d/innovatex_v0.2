@@ -1,20 +1,12 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  ChevronDown,
-  ChevronUp,
-  Trash,
-  Square,
-  CheckSquare,
-  Phone,
-  User,
-} from "lucide-react";
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ChevronDown, ChevronUp, Trash, Square, CheckSquare, Phone, User, Building2 } from "lucide-react"
 
 const TeamCard = ({ team, onVerify, onDelete }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [preview, setPreview] = useState(null);
+  const [expanded, setExpanded] = useState(false)
+  const [preview, setPreview] = useState(null)
 
   return (
     <>
@@ -27,6 +19,11 @@ const TeamCard = ({ team, onVerify, onDelete }) => {
           <div>
             <h3 className="text-xl font-bold">{team.teamName}</h3>
             <div className="text-sm text-gray-400">{team.track}</div>
+            {/* Added college name display */}
+            <div className="text-sm text-purple-400 flex items-center mt-1">
+              <Building2 className="h-3 w-3 mr-1" />
+              {team.collegeName || "No college specified"}
+            </div>
           </div>
 
           {/* Verify Checkbox */}
@@ -69,19 +66,10 @@ const TeamCard = ({ team, onVerify, onDelete }) => {
 
         {/* Expandable Team Details */}
         <div className="flex justify-between">
-          <div className="text-sm text-gray-400">
-            {team.members.length} team members
-          </div>
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="text-purple-400 flex items-center"
-          >
+          <div className="text-sm text-gray-400">{team.members.length} team members</div>
+          <button onClick={() => setExpanded(!expanded)} className="text-purple-400 flex items-center">
             {expanded ? "Hide details" : "Show details"}
-            {expanded ? (
-              <ChevronUp className="ml-1 h-4 w-4" />
-            ) : (
-              <ChevronDown className="ml-1 h-4 w-4" />
-            )}
+            {expanded ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />}
           </button>
         </div>
 
@@ -179,7 +167,8 @@ const TeamCard = ({ team, onVerify, onDelete }) => {
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}
 
-export default TeamCard;
+export default TeamCard
+
