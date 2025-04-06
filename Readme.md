@@ -1,119 +1,159 @@
-# Registration Form with Google Sheets Integration
+### ✅ `frontend/README.md`
 
-This project is a **React-based Registration Form** that submits user data (name and email) to a **Google Sheets backend** via **Google Apps Script**.
+```markdown
+# 🚀 Hackathon Frontend
 
-## 🚀 Features
-- 🌟 **React Form** with Tailwind CSS and Framer Motion animations.
-- 🔄 **Google Sheets Integration** using Google Apps Script (`code.gs`).
-- 📡 **POST Request Handling** in `doPost()` method of Google Apps Script.
-- ✅ **Success/Error Handling** with user feedback messages.
-- 🔄 **Form Reset on Success** after submission.
+This is the frontend for the Innovatex Hackathon registration platform. It is built using **React.js** with **Vite**, **Tailwind CSS**, and **React Router DOM** for routing. The application provides a landing page, registration form, dashboard, and more.
 
-## 📌 Technologies Used
-- **React.js** (Next.js client component)
-- **Google Apps Script** (Backend logic)
-- **Tailwind CSS** (Styling)
-- **Framer Motion** (Animations)
-- **Lucide React** (Icons)
+## 🌐 Live Preview
 
----
+[🔗 Dev Station (Live Site)](https://devstation.netlify.app/)
 
-## 🛠️ Setup & Deployment
+## 🧰 Tech Stack
 
-### 1️⃣ Deploy Google Apps Script
-1. Open [Google Apps Script](https://script.google.com/).
-2. Create a new project and paste `code.gs`.
-3. Save & **Deploy** as a Web App.
-4. Set access to **Anyone with the link**.
-5. Copy the **Deployment URL**.
+- React.js (Vite)
+- Tailwind CSS
+- React Router DOM
+- JSX Components
+- Axios (for API calls)
 
-### 2️⃣ Update React Code
-- In `RegistrationForm.tsx`, update the API endpoint:
-  ```tsx
-  const url = "YOUR_DEPLOYED_SCRIPT_URL";
-  ```
+## 🗂️ Folder Structure
 
-### 3️⃣ Run React Project
+```
+src/
+├── components/
+│   ├── Navbar.jsx
+│   ├── Preloader.jsx
+│   ├── Hero.jsx
+│   ├── CountdownTimer.jsx
+│   ├── Timeline.jsx
+│   ├── Tracks.jsx
+│   ├── Prizes.jsx
+│   ├── Sponsors.jsx
+│   ├── FAQ.jsx
+│   ├── Team.jsx
+│   ├── Footer.jsx
+│   ├── CommingSoon.jsx
+│   ├── Guideline.jsx
+│   └── admin/
+│       └── Dashboard.jsx
+├── App.jsx
+└── main.jsx
+```
+
+## 📦 Installation
+
 ```bash
+cd frontend
 npm install
+```
+
+## 🚀 Run the app
+
+```bash
 npm run dev
 ```
 
----
+## 🧪 Routes
 
-## 📝 Code Overview
+- `/` – Home
+- `/register` – Team Registration Form
+- `/hakathon-dashboard` – Admin Dashboard
+- `/timeline`, `/tracks`, `/prizes`, `/sponsors`, `/faq`, `/team` – Informative pages
+- `/guideline`, `/commingsoon` – Extras
 
-### `code.gs` (Google Apps Script)
-Handles `POST` requests from React and writes data to Google Sheets.
+## 📄 API Base URL
 
-```javascript
-function doPost(e) {
-  const lock = LockService.getScriptLock();
-  lock.tryLock(10000);
-  try {
-    const scriptProp = PropertiesService.getScriptProperties();
-    const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
-    const sheet = doc.getSheetByName('Sheet1');
-    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-    const nextRow = sheet.getLastRow() + 1;
-    const requestData = JSON.parse(e.postData.contents);
-    const newRow = headers.map(header => requestData[header.toLowerCase()] || '');
-    sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow]);
-    return ContentService.createTextOutput(JSON.stringify({ result: "success" })).setMimeType(ContentService.MimeType.JSON);
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ result: "error", error: error.toString() })).setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    lock.releaseLock();
-  }
-}
-```
+Set your backend base URL in your API service file or environment:
 
-### `RegistrationForm.tsx` (React Form)
-Handles the user interface and form submission to Google Sheets.
-
-```tsx
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setSubmitStatus("idle");
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    const result = await response.json();
-    if (result.result === "success") {
-      setFormData({ name: "", email: "" });
-      setSubmitStatus("success");
-    } else {
-      throw new Error(result.error);
-    }
-  } catch (error) {
-    setSubmitStatus("error");
-    setErrorMessage(error.message || "Submission failed. Try again.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+```js
+const BASE_URL = "http://localhost:8000/api";
 ```
 
 ---
 
-## 🎯 Future Improvements
-- ✅ Add more form fields (phone, message, etc.).
-- ✅ Implement reCAPTCHA for spam protection.
-- ✅ Improve error handling with better logging.
+### ✅ `backend/README.md`
 
-## 📜 License
-This project is open-source and available under the MIT License.
+```markdown
+# 🛠️ Hackathon Backend
 
+This is the backend server for Innovatex Hackathon registration. It handles team registration, file uploads via Cloudinary, and admin verification with EJS confirmation slips.
 
-<!-- Prize will be update
-Problem statement will be chnage
-faculty corrdinator will add -->
+## 🧰 Tech Stack
+
+- Node.js
+- Express.js
+- MongoDB (Mongoose)
+- Cloudinary
+- EJS (for rendering confirmation slips)
+- dotenv
+- morgan
+- cors
+
+## 📁 Project Structure
+
+```
+backend/
+├── config/
+│   ├── db.js
+│   └── cloudinary.js
+├── models/
+│   └── teamModel.js
+├── routes/
+│   ├── teamRoutes.js
+│   └── adminRoutes.js
+├── views/
+│   └── confirmation.ejs
+├── public/
+│   └── (static assets)
+├── server.js
+└── .env
+```
+
+## 📦 Installation
+
+```bash
+cd backend
+npm install
+```
+
+## ⚙️ Environment Variables (`.env`)
+
+```env
+PORT=8000
+MONGO_URI=your_mongodb_connection_string
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+## 🚀 Run the server
+
+```bash
+npm run dev
+```
+
+## 🔐 API Routes
+
+| Method | Endpoint                | Description                       |
+|--------|-------------------------|-----------------------------------|
+| POST   | `/api/team/register`    | Register a new team               |
+| GET    | `/api/team/all`         | Get all registered teams          |
+| GET    | `/api/team/:teamName`   | Get team by name                  |
+| GET    | `/confirmation/:id`     | View confirmation slip (EJS)      |
+| POST   | `/api/admin/verify`     | Admin: Verify team (add teamId)   |
+| GET    | `/api/admin/teams`      | Admin: View all registered teams  |
+
+## 📄 Notes
+
+- `teamId` is generated sequentially (e.g., team1, team2...) during admin verification.
+- File uploads are stored on Cloudinary under `hackathon_payments/`.
 
 ---
 
-Happy Coding! 🚀
+## 📬 Contact
 
+For any questions or issues, reach out to **Durga Prasad Dalai** at:  
+📧 [durgaprasaddalai10@gmail.com](mailto:durgaprasaddalai10@gmail.com)
+
+```
